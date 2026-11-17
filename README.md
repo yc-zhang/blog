@@ -1,4 +1,4 @@
-# 张羽辰的技术博客
+# Yuchen 的技术博客
 
 [浏览技术博客](https://yc-zhang.github.io/blog/)。内容覆盖软件架构、编程语言、数据库、Web 与网络、安全。
 

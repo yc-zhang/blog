@@ -4,7 +4,7 @@
 
 ![1009头图.png](images/choosing-service-discovery/01.png "1009头图.png")
 
-作者 | 张羽辰(同昭)
+作者 | Yuchen
 
 ## 引子——什么是服务发现
 
@@ -131,6 +131,6 @@ Kubernetes Service 也具有同样的能力，随着容器化的逐渐成熟，�
 
 ### 作者简介
 
-<strong>张羽辰（同昭）</strong>阿里云交付专家，有着近十年研发经验，是一名软件工程师、架构师、咨询师，从 2016 年开始采用容器化、微服务、Serverless 等技术进行云时代的应用开发。同时也关注在分布式应用中的安全治理问题，整理《微服务安全手册》，对数据、应用、身份安全都有一定的研究。
+<strong>Yuchen</strong>阿里云交付专家，有着近十年研发经验，是一名软件工程师、架构师、咨询师，从 2016 年开始采用容器化、微服务、Serverless 等技术进行云时代的应用开发。同时也关注在分布式应用中的安全治理问题，整理《微服务安全手册》，对数据、应用、身份安全都有一定的研究。
 
 > “[阿里巴巴云原生](http://mp.weixin.qq.com/s?__biz=MzUzNzYxNjAzMg==&mid=2247494956&idx=1&sn=b7f793cfad339f6f82506aafdb275cb0&chksm=fae6e6e3cd916ff5255d36e425ee326097c8000e69cdc32c9915c96925180a9cacad4395d786&token=208776024&lang=zh_CN#rd)关注微服务、Serverless、容器、Service Mesh 等技术领域、聚焦云原生流行技术趋势、云原生大规模的落地实践，做最懂云原生开发者的公众号。”

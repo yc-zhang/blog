@@ -10,7 +10,8 @@ from markdown_it import MarkdownIt
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / 'content' / 'technical'
 OUTPUT = ROOT / 'dist'
-SITE_NAME = '张羽辰的技术博客'
+AUTHOR = 'Yuchen'
+SITE_NAME = f'{AUTHOR} 的技术博客'
 REPOSITORY = 'https://github.com/yc-zhang/blog'
 SLUG = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
 IMAGE_EXTENSIONS = {'.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp'}
@@ -62,7 +63,7 @@ def document(title, home, body, description=None):
   <a class="skip-link" href="#main">跳到正文</a>
   <header class="site-header">
     <div class="shell header-inner">
-      <a class="brand" href="{home}index.html"><span class="brand-mark" aria-hidden="true"></span>张羽辰</a>
+      <a class="brand" href="{home}index.html"><span class="brand-mark" aria-hidden="true"></span>{AUTHOR}</a>
       <nav aria-label="主导航">
         <a href="{home}index.html#library">文章目录</a>
         <a href="{REPOSITORY}">GitHub<span aria-hidden="true"> ↗</span></a>
@@ -244,7 +245,7 @@ def build():
     for output, title, body in pages:
         write_page(output, title, '../../', body)
     write_page(Path('index.html'), SITE_NAME, './', index_page(nav, categories, len(pages), featured_title),
-               '张羽辰的技术文章，按软件架构、编程语言、数据库、Web 与网络、安全分类。')
+               f'{AUTHOR} 的技术文章，按软件架构、编程语言、数据库、Web 与网络、安全分类。')
     print(f'Built {len(pages)} articles and {len(images)} images in {OUTPUT}')
 
 
