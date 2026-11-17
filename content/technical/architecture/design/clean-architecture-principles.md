@@ -2,7 +2,7 @@
 
 废话之前先写结论，如果你有一个类似于架构师、技术负责人这种头衔，或者你是一个很优秀的工程师，想进行一些架构方面的学习，那么这本书是一定要认真看，建议看英文版，单词不难，很好理解。
 
-![Clean Architecture](https://upload-images.jianshu.io/upload_images/3819274-df29b5214879682b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Clean Architecture](images/clean-architecture-principles/01.webp)
 
 《Clean Architecture》是《Clean Code》的姊妹篇，或者说是迟到的姊妹篇，作者 Robert.C.Martin 与其称号 Uncle Bob 想必不用介绍了，在“软件工程”领域，Uncle Bob 与 Kent Beck，Martin Flower 这些大佬一样，都是干货满满一生都在贡献的人。几年前我曾经读过《Clean Code》，至今都难以忘记这本书对我开发生涯的帮助，在不断的成长中，发现自己忍受不了所谓的垃圾代码了，我们应该追求更好的，更干净的代码。那么，除了写代码，在架构设计上有没有所谓的清晰架构呢？回首就发现了这本出了没多久的《Clean Architecture》。
 

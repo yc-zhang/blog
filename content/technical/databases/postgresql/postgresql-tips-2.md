@@ -142,7 +142,7 @@ CREATE TABLE item (
 #### 运行
 
 我理想中的进行数据库变更是发生在 CI 中的，而且是在应用部署之前完成，我们可能会有这样一段 pipeline：
-![image.png](https://upload-images.jianshu.io/upload_images/3819274-ca14387e3c79869f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](images/postgresql-tips-2/01.webp)
 
 （仅供举例，不代表真实情况）
 

@@ -91,7 +91,7 @@ services:
       - "445:443"
 ```
 以下是多路复用的观察结果：
-![效果拔群](https://upload-images.jianshu.io/upload_images/3819274-8991db1f142bb3a7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![效果拔群](images/http2-practice/01.webp)
 
 关于 NGINX 的 HTTP2 Features 可以参考:
 - [theory-and-practice-1](https://www.nginx.com/blog/http2-theory-and-practice-in-nginx-stable-13/)

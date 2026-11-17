@@ -16,4 +16,4 @@ python3 -m venv .venv
 .venv/bin/python -m http.server --directory dist 8000
 ```
 
-打开 [本地站点](http://localhost:8000)。正文中的原站图片仍使用原有远程链接。
+打开 [本地站点](http://localhost:8000)。归档插图位于文章同级的 `images/<文章文件名>/`，Markdown 和本地预览都可离线显示。

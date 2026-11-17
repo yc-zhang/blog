@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / 'content' / 'technical'
 OUTPUT = ROOT / 'dist'
 SLUG = re.compile(r'[a-z0-9]+(?:-[a-z0-9]+)*')
+IMAGE_EXTENSIONS = {'.avif', '.gif', '.jpeg', '.jpg', '.png', '.webp'}
 
 
 def slug(entry):
@@ -70,12 +71,23 @@ def render_article(source, title):
     return markdown.render(raw)
 
 
+def article_images(source):
+    directory = source.parent / 'images' / source.stem
+    if directory.is_dir():
+        for image in directory.iterdir():
+            if image.is_file() and image.suffix.lower() in IMAGE_EXTENSIONS:
+                if not image.resolve().is_relative_to(CONTENT.resolve()):
+                    raise ValueError(f'Invalid article image: {image}')
+                yield image.relative_to(CONTENT)
+
+
 def build():
     catalog = json.loads((CONTENT / 'catalog.json').read_text(encoding='utf-8'))
     listed = set()
     nav = []
     categories = []
     pages = []
+    images = set()
     used_categories = set()
     for category in catalog:
         category_id = slug(category)
@@ -104,6 +116,7 @@ def build():
                 output = relative.with_suffix('.html')
                 article_links.append(f'<li><a href="{output.as_posix()}">{escape(title)}</a></li>')
                 body = render_article(source, title)
+                images.update(article_images(source))
                 pages.append((output, title, f'''
                   <main class="reading">
                     <nav class="breadcrumbs" aria-label="当前位置">
@@ -127,6 +140,10 @@ def build():
     OUTPUT.mkdir()
     shutil.copyfile(ROOT / 'site-assets' / 'style.css', OUTPUT / 'style.css')
     (OUTPUT / '.nojekyll').touch()
+    for image in sorted(images):
+        target = OUTPUT / image
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(CONTENT / image, target)
     for output, title, body in pages:
         write_page(output, title, '../../', body)
     write_page(Path('index.html'), '张羽辰的技术文章', './', f'''

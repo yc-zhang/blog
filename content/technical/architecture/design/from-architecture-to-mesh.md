@@ -2,7 +2,7 @@
 
 发表于 2020-07-16 · [博客园 · 阿里云云原生原文](https://www.cnblogs.com/alisystemsoftware/p/13322564.html)
 
-![头图.png](https://ucc.alicdn.com/pic/developer-ecology/86352d3656e44da2b3492a13c5974e53.png)
+![头图.png](images/from-architecture-to-mesh/01.png)
 
 作者 | 张羽辰（同昭）阿里云交付专家
 
@@ -16,7 +16,7 @@
 
 但是，建筑学上的架构与软件架构却又极大的不同之处，问题出现在“软件”这个词上，按照 software 的词解，ware 是指产品一样的东西，而 soft 则强调易变，这是与 hardware 所对应的。我们希望“软件”能够进行快速的修改，应该能够快速响应甲方或者客户的需求，所以软件架构必然不像建筑架构一样，建筑一经建成，修改的成本极高，<strong>而软件应该走对应的方向，发挥易于修改的特点。</strong>
 
-![1.png](https://ucc.alicdn.com/pic/developer-ecology/d6a65d3bbf13454ca44b0b92ab6e52bc.png)
+![1.png](images/from-architecture-to-mesh/02.png)
 
 > “现在的大多数软件非常像埃及金字塔，在彼此之间堆建了成千上万的砖块，缺乏结构完整性，只是靠蛮力和成千上万的奴隶完成。” —— Alan Kay。
 
@@ -32,7 +32,7 @@
 
 这里引用 Robert C·Martin（Uncle Bob）的原语，“软件产品是有两方面的价值，一方面是实现功能的价值，另一方面是架构的价值，<strong>而架构的价值可能更重要一些，因为它代表着软件 soft 的特性。</strong>”
 
-![2.png](https://ucc.alicdn.com/pic/developer-ecology/4e77aeba12974e05a491d6b6193b7a44.png)
+![2.png](images/from-architecture-to-mesh/03.png)
 
 > 本书例子过少，而且缺乏现有流行框架的重构或者改进建议，有点形而上，但是在方法论层面笔者还是认为值得一读。Robert C·Martin 对数据库（特指 RDBMS）的态度很值得讨论，首先他认为数据库是一种细节，在架构中应该与业务解耦，他强调业务代码与数据库的无关性。同时在我们的代码进行计算时，表格往往不是理想的数据结构，比如有些场景会使用树、DAG 等等。可以回想一下，当你需要把一个树存入数据库时，你该如何实现？
 
@@ -44,7 +44,7 @@
 
 但是世界上没有免费的午餐，虽然我们知道微服务有很多很好的特性，比如组件即服务、松耦合、独立部署、面向业务、高维护性、高扩展性等等，这里并不想展开讨论它的好处，我们先考虑投入成本。假设我们每个同学都完整的学习了微服务的所有知识，对市面上的框架、产品非常熟悉，摩拳擦掌准备开始，在拆解完几个服务后，我们会发现，没有足够的自动化手段，靠手动的方式进行测试、编译、部署、监控，这是显而易见的会降低体验，如果没有优化好的部署策略，所有的服务都在某个发布日上线，那更是一种灾难。
 
-![3.png](https://ucc.alicdn.com/pic/developer-ecology/5a59eacf9d2d493a837106b037b6decd.png)
+![3.png](images/from-architecture-to-mesh/04.png)
 
 > 随着规模的扩大，单体应用的代码改动成本会越来越大。很多时候我们微服务的架构实践是存在误区的，我们总认为流量经过某个 gateway 后直达某个服务，确忽视了服务之间调用的场景，理想的微服务架构应该是一张网，每个节点都是独立的、自治的服务。
 
@@ -72,7 +72,7 @@ PlayStation 首席设计师 Mark Cerny 在今年的 PS5 新主机的技术分享
 
 对于云原生，不论是 CNCF 还是 Pivotal （VMWare）都在强调容器化、微服务、面向云环境等，CNCF 围绕 Kubernetes 开始发展壮大，也随着这种先进的容器编排技术的流行人们渐渐发现它和 Spring Cloud 在功能上还是存在很多重叠，虽然 k8s 与 IaaS 没有重叠，但是现在还有多少厂商再推纯 IaaS 呢？既然有功能重叠，就有取舍，考虑到 Spring Cloud 的全家桶属性，这个分歧处理一直都不能很好的解决。
 
-![4.png](https://ucc.alicdn.com/pic/developer-ecology/48912125ab124d43bae0fda6c21fe33d.png)
+![4.png](images/from-architecture-to-mesh/05.png)
 
 ### 集中式的资源
 
@@ -92,7 +92,7 @@ PlayStation 首席设计师 Mark Cerny 在今年的 PS5 新主机的技术分享
 
 ## Istio 的解法与问题，以及 Mesh 还缺少什么
 
-![5.png](https://ucc.alicdn.com/pic/developer-ecology/09a718a4179d44878221277e2fa8056a.png)
+![5.png](images/from-architecture-to-mesh/06.png)
 
 > 这个开幕雷击虽然槽点满满，但并没有降低社区对 Istio 的信心，反倒是渐渐发现这次的大改动使 Istio 变得有点好用了，可以在生产中采用而不需要付出太多代价了。当然，漂亮话永远好说。
 
@@ -128,7 +128,7 @@ Istio 的流量控制能力是非常强大的，如何对服务采取降级、�
 
 基于 K8s 实现应用的高可用应该不难，容器的天生优势就是易于启动与管理，如果随机杀掉 pod 不会影响系统可用性，这就算是实现了类似于 SLB + ECS + ASG 的能力，真正危险的是其他 非业务型 pod，比如 istio 的各种 supervisor。
 
-![6.png](https://ucc.alicdn.com/pic/developer-ecology/b82afeed8d0447ddb221e20f99660139.png)
+![6.png](images/from-architecture-to-mesh/07.png)
 
 > 实践微服务，作为架构师所考虑的东西远远大于只是实现业务，但是一旦铺平道路，下来的研发与迭代将会更加顺利。
 

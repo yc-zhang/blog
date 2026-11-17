@@ -12,13 +12,13 @@
 
 对于访问控制模型，大家最熟悉、或者实现最多的就是 RBAC Role Based Access Control，我们通过赋予不同 role 的不同权限来进行访问控制。对于一个主体（往往是组织内的人员或者某个客户端），他可以拥有多个 role 以应对多种不同的操作权限。**RBAC 的流行很重要很大程度上是贴近现实生活，方便大家理解与使用**，例如老王是销售经理，同时也是技术委员会的成员，我们很自然就给他两个 role：Sales Manager 与 Technology Group Member，而这两个 role 对应的权限也很清晰明确，Sales Manager 可以查看所有的销售数据，并进行修改等，而 Technology Group Member 只能查看技术上的文献，不论是在系统设计还是在运营时，这些名词都与我们的 title 相对应，**对于管理人员来说，只是修改不同的 role 对应的权限而已。** 当老王专心去做技术研究之后，我们就移除他的 Sales Manager Role，这样他就无法访问销售上的数据了。
 
-![老王失去了 Sales Manager 的 role 后，就无法继续访问销售数据了](https://upload-images.jianshu.io/upload_images/3819274-a359836df3b0df7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![老王失去了 Sales Manager 的 role 后，就无法继续访问销售数据了](images/abac-access-control/01.webp)
 
 RBAC 在很多时候是管用的，比如我们的系统是面向销售公司或者学校这种组织架构很严整的地方，但是在复杂场景下，RBAC 渐渐就不够用了，它会产生很多虚无的 role 而且在管理和控制上更难：在某个医疗机构中，我们想要控制一个科室内，护士只能访问自己所负责的病人资料时，我们就无法直接使用 nurse 这个 role，我们需要更细粒度的 role 去划分病人老张还是老王，这就会产生和现实不对应的 role，例如：老张的护士，老王的护士。在医院这种病人流动性很大的场景下，频繁的创建和销毁 role 是很容易出问题，我们的确要求很频繁，但是与现实不 match 的虚无的 role 很难管理。
 
 另一种情况是，如果管理者考虑医疗数据的安全性与隐私性，不希望护士在离开医院后能够访问到病人资料，我们会更加难办，常见的策略要么是在底层网络层进行处理，直接禁止在院外的一切访问，但是很多企业的需求往往是，使用 VPN 我依旧可以访问内部的资源，但是我还是希望基于所在地进行精确的控制，比如看邮件是可以的，但是看财务数据是不行的。在 RBAC 下，我们也可以通过虚拟的 role 来控制，比如下班后给与其 Out of Office 的 role，然后给与这个 role 最小的权限，这自然又需要虚拟的 role 与大量的动态控制。
 
-![给在办公室外的同事创建了与职位不对称的 role](https://upload-images.jianshu.io/upload_images/3819274-dee3d2d5c056b1ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![给在办公室外的同事创建了与职位不对称的 role](images/abac-access-control/02.webp)
 
 > 一般来说，在 RBAC 中滥用 role 所带来的问题被称为 “role explosion”，跟“曹操”与“曹操小时候”这个笑话很类似，但的确我们的访问控制系统中存在很多这样的 role。
 
@@ -50,7 +50,7 @@ RBAC 在很多时候是管用的，比如我们的系统是面向销售公司或
 
 一个典型的 ABAC 场景描述如下图，当 subject 需要去读取某一条记录时，我们的访问控制机制在请求发起后遍开始运作，该机制需要计算，来自 policy 中记录的规则，subject 的 attribute，object 的 attribute 以及 environment conditions，而最后会产生一个是否允许读取的结果。
 
-![From NIST 800-162: Basic ABAC Scenario](https://upload-images.jianshu.io/upload_images/3819274-5fd4b58622ad8a25.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![From NIST 800-162: Basic ABAC Scenario](images/abac-access-control/03.webp)
 
 1. 尝试访问
 2. ACM 进行计算：subject attributes + object attributes + environment conditions = allow or deny?
@@ -58,11 +58,11 @@ RBAC 在很多时候是管用的，比如我们的系统是面向销售公司或
 
 在 NIST 的描述中，我们对 ACM 内部进行进一步的抽象，可以得出这两个核心模块：Policy Decision Point (PDP) 与 Policy Enforcement Point (PEP)，如下图：
 
-![PDP + PEP](https://upload-images.jianshu.io/upload_images/3819274-d5429723f54c5cf9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![PDP + PEP](images/abac-access-control/04.webp)
 
 所以，实现 ABAC 的核心机制是在请求发起后，subject attributes、object attributes 与 environment conditions 作为输入，PDP 根据 PEP 的数据去获取 policy 与环境条件，再进行计算，最后确定是否有权进行请求。ABAC 的逻辑并不复杂，根据之前我们所画的基本场景与机制的图中，你可以很轻松的开始进行架构设计，往往最开始你需要定义出 subject、object 以及其相关的 attribute，同时你也需要思考，当去进行 object 访问时，你该如何表达 request 以及 operation。
 
-![From NIST 800-162: An Example of ACM Functional Points](https://upload-images.jianshu.io/upload_images/3819274-036be3b114f42cb1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![From NIST 800-162: An Example of ACM Functional Points](images/abac-access-control/05.webp)
 
 RESTful 是我们常用的设计风格，RESTful 的流行是与 HTTP 协议密不可分的，其中我们很看重 HTTP 协议中的 methods，并且赋予了这些 methods 易于理解的语义，我们会很自然的认为 GET 是获取资源，而 POST 是创建新的资源，PUT 则是修改，使用这些 methods 是与控制资源联系在一起。但是，在 HTTP 协议中，并没有规定 GET 是否可以进行资源上的修改和更新，因为这只是个传输协议罢了，是我们在这个协议之上发明了新的东西，所以也没有“官方的、标准的” RESTful。之所以在这里提到 RESTful 与 HTTP 的关系，是想让大家理解在进行 ABAC 系统设计时，operation 是可以有很多种表达的，而重要的是定义这些 operation 与 request 的关系，你可以使用 SOAP 或者其他协议，或者在 RESTful 之上自己发明一些字段，或者加入进 HTTP header，但是一定需要有清楚的 operation 描述。
 
@@ -84,7 +84,7 @@ ABAC 对系统管理员是友好的，在 RBAC 的时代，如果我需要实现
 
 往往，我们会使用 JSON 或者 XML 定义这个 policy，那么，这一切都可以完全自动化，而不需要使用管理员点击。再现实一些的话，我们可以完全实现一个审批的流程，如果你使用过 Google Drive，你会对这个请求访问的过程绝不陌生。
 
-![Require Access](https://upload-images.jianshu.io/upload_images/3819274-0a8fc7af2935bfde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Require Access](images/abac-access-control/06.webp)
 
 #### 动态的总体控制
 

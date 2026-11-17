@@ -6,7 +6,7 @@ Sidecar 是一个很纠结的名字，我们在翻译技术雷达时采用了一
 
 Sidecar 直接表示就是挎斗摩托车，也就是常说的“三蹦子”，如果你经常玩吃鸡，你一定不陌生。在“三蹦子”中，往往有个挎子，它不提供动力，但是也是这个机动装置的一个重要的组成部分，如果坐着一个妹子就可以给开车的你喂水果。
 
-![sidecar](https://upload-images.jianshu.io/upload_images/3819274-a083dd1a14667690.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![sidecar](images/sidecar-pattern/01.webp)
 
 我们目前很多程序都是奔着 Cloud Native 的目标去的，我们的代码注定是要跑在云上的，当有人问我如果我要做到 Cloud Native 时，有没有合适的学习资料之类的时，我会考虑如果你是有一定经验的开发者，并且对 Design Pattern 有一些了解，那么你非常适合这本来自微软 P & P Group 的书 [Cloud Design Patterns](https://docs.microsoft.com/en-us/azure/architecture/patterns/)，虽然这本书很简单，实例也不多，但是更多的是启发性。我也是在 Cloud Design Pattern 这本书中学到了很多，sidecar 也是其中之一，并且我们写了很多很多 Sidecar 用于管理自己的 Service Mesh 。
 
@@ -55,7 +55,7 @@ Sidecar 不是应用程序的必要组成部分，当你使用 docker-compose �
 
 每个“三蹦子”都有自己的 sidecar，每个 sidecar 都是紧紧的 attach 到它的“三蹦子”上的。
 
-![没有上容器云之前的 Sidecar 例子](https://upload-images.jianshu.io/upload_images/3819274-b68b7d94c87f822c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![没有上容器云之前的 Sidecar 例子](images/sidecar-pattern/02.webp)
 
 那么，引用并修改一下 sidecar 的特性
 - Sidecar 是独立于其应用程序之外的，不使用应用程序的运行环境与编程语言。比如你可以使用 JavaScript 去做日志收集器，而不用关心应用程序用的什么语言，你们使用进程通信的方式或者更粗暴的流

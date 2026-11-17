@@ -68,7 +68,7 @@ object SomeBusiness extends SomeBusiness(ProfileDBDAO, SomeGenerator, OtherCompo
 
 这段不太规整的 scala 代码描述了业务与数据库之间的关系，SomeBusiness 的业务逻辑是写在 abstract class 中的，其注入的 dao 变量并没有说明实现细节，对于 SomeBusiness 来说，只知道使用 dao 的某些方法，至于细节的实现则是在 object ProfileDBDAO 中完成的。那组合这些功能的地方，则在 object SomeBusiness 中，这里采用了伴生对象的方法，在 scala 中算是比较常见的做法，在测试中，我们只要面对 abstract class SomeBusiness 就可以了，object SomeBusiness 只是起到了注入依赖的作用。按照书中的意思，我们也画一个边界意思一下：
 
-![a boundary](https://upload-images.jianshu.io/upload_images/3819274-42479ffad5598589.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![a boundary](images/clean-architecture-architecture/01.webp)
 
 也就是说，有朝一日你需要将使用 MySQL 的 ProfileDBDAO 换成 ProfileMongoDBDAO，你只需要关注边界下面的改动实现，在 Spring 的世界中，Autowire 会帮你直接注入新的 DB DAO。
 

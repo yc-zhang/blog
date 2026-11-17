@@ -36,7 +36,7 @@ public BusinessResult purchase(final OrderRequest orderRequest) {
 
 假设我们的服务逻辑架构是这个样子：
 
-![architecture diagram](https://upload-images.jianshu.io/upload_images/3819274-c9fd45e4bb60b3e2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![architecture diagram](images/saga-distributed-transactions/01.webp)
 
 
 而在代码中，我们的 `orderService` `walletService` `inventoryService` 已经不是使用 DAO 去操作本地的关系型数据库了，而是使用 RestTemplate 或者其他工具分别访问对应的服务（当然可能会有断路器或者服务发现的 facade 等等，现实往往更复杂一些）。那么，我们面临的第一个问题就是：
@@ -51,7 +51,7 @@ public BusinessResult purchase(final OrderRequest orderRequest) {
 
 Saga Pattern 和我之前使用过的补偿事务模式（Compensation Transaction https://docs.microsoft.com/en-us/azure/architecture/patterns/compensating-transaction) 很类似，简单来说，你必须自己显示的实现对事务回滚来保证正确性，所以称之为补偿事务。
 
-![a lot of local transactions](https://upload-images.jianshu.io/upload_images/3819274-6016da8181cdf473.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![a lot of local transactions](images/saga-distributed-transactions/02.webp)
 
 所以 Saga 听起来很简单，我们可以用一堆本地事务（上图中的 LT，即 local transaction）自己去 rollback 之前的改动，对数据进行补偿，表达在代码上，大约是这个样子：
 
@@ -81,7 +81,7 @@ public Result purchase(final Consumer consumer, final Order order) {
 
 我们先来解释什么是 Event，Event 表示命令完成后的状态描述，例如 order_created 或者 items_reserved，这两个 event 分别描述在 OrderService 中创建了订单成功后发送的事件，以及 InventoryService 中成功的为用户保留了商品，准备发货。那么，我们就可以使用这些 event 来实现 Saga。
 
-![Choreography Saga](https://upload-images.jianshu.io/upload_images/3819274-2aae1cd3c59e3769.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![Choreography Saga](images/saga-distributed-transactions/03.webp)
 
 上面这个逻辑流程图看起很复杂，但是其实在现在流行的流式架构中非常常见，只是很多时候我们不使用 Event 来描述每个消息，而更多的是使用 Command。在今天，特别是 Apache Kafka 与 AWS Kinesis 这种现代的 Message Borker 可以帮我们轻松的实现事件的 pub-sub 模式，并且性能极佳。按照图上的描述，在第一步用户创建订单后，我们可以 OrderService 的数据库中表述订单为 Pending 状态，直到收到 Inventory Reserved 或者 Inventory Denied 这两个事件。
 

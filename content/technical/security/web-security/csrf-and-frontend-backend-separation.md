@@ -33,9 +33,9 @@ $.ajaxSetup({
 
 随着前后端分离与单页应用的到来，我们往往在后端使用 RESTful 的方式暴露接口，前端使用 react、angular 或者 VUE 来控制渲染和交互，那么，也就不存在如何在 form 中放入一个 token 来进行 CSRF 的验证了。对于 RESTful 的接口，本质上是无状态的（stateless），而 anti-CSRF token 是依靠 session 中的状态来进行判断，那么也就无法再使用这种方式了。
 
-![以前](https://upload-images.jianshu.io/upload_images/3819274-e1bddfe54f53eb7e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![以前](images/csrf-and-frontend-backend-separation/01.webp)
 
-![前后端分离后](https://upload-images.jianshu.io/upload_images/3819274-1c5b0630ca8c4616.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![前后端分离后](images/csrf-and-frontend-backend-separation/02.webp)
 
 可以看到，在前后端进行分离后，最简单的集成方式如上图：
 1）用户通过浏览器请求某个网站例如 www.google.com，然后 DNS 转移至前端站点，获取前端资源
@@ -84,7 +84,7 @@ $.ajaxSetup({
 
 解决这些问题的套路也不复杂，无非就是引入一个状态，也就是生成 token 与验证 token 的组件应该是一个，而且对于后端的服务来说，这是透明的。那么使用 API Gateway 或者自己写一个 Security Sidecar 就可以做到。大约是这样的逻辑：
 
-![再引入一个新的模块](https://upload-images.jianshu.io/upload_images/3819274-e9a83bf1fcbd1ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![再引入一个新的模块](images/csrf-and-frontend-backend-separation/03.webp)
 
 看起来我们是解决了这个问题，我们引入了新的安全模块，它有可能是写在 WAF里，也有可能是 Security Sidecar 或者自定义的 API Gateway，总之，它在哪里用什么技术实现并不重要，重要的是这几个职责：
 

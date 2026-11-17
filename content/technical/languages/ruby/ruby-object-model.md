@@ -580,7 +580,7 @@ p C.singleton_class.superclass # => #Object
 
 所以我们修改了方法查找：
 
-![](http://upload-images.jianshu.io/upload_images/3819274-2e0141e10273690e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](images/ruby-object-model/01.webp)
 
 ```ruby
 Object.singleton_class => #Object

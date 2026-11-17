@@ -2,7 +2,7 @@
 
 发表于 2020-10-10 · [阿里云开发者社区原文](https://developer.aliyun.com/article/775388)
 
-![1009头图.png](https://ucc.alicdn.com/pic/developer-ecology/da190f1078ec43fd8a109a7bb651299c.png?x-oss-process=image/resize,w_1400/format,webp "1009头图.png")
+![1009头图.png](images/choosing-service-discovery/01.png "1009头图.png")
 
 作者 | 张羽辰(同昭)
 
@@ -16,11 +16,11 @@
 
 但是 Armon（HashiCorp 的创始人）在他的技术分享中提到，实现分布式是没有免费午餐的，一旦你通过网络进行远程调用，那网络是否可达、延迟与带宽、消息的封装以及额外的客户端代码都是代价，在此基础上，有时候我们还会有负载均衡、断路器、健康检查、授权验证、链路监控等需求，这些问题是之前不需要考虑的。所以，我们需要有“产品”来帮助我们解决这类问题，我们可以先从 Eureka 开始回顾、整理。
 
-![1.png](https://ucc.alicdn.com/pic/developer-ecology/2cb5f89b93094303ad6b62edc463d8b9.png?x-oss-process=image/resize,w_1400/format,webp "1.png")
+![1.png](images/choosing-service-discovery/02.png "1.png")
 
 一个单体应用部署在多台服务器中，模块间通过方法直接调用。
 
-![2.png](https://ucc.alicdn.com/pic/developer-ecology/b2c3caa327ca47a6bfb9c3305fb0414e.png?x-oss-process=image/resize,w_1400/format,webp "2.png")
+![2.png](images/choosing-service-discovery/03.png "2.png")
 
 分布式的情况下，模块之间的调用通过网络，也许使用 HTTP 或者其他 RPC 协议。
 
@@ -32,7 +32,7 @@
 
 对于 Netflix 来说，这样的模型是非常合理的，首先服务与 node 的关系相对静态，一旦一个服务投入使用其使用的虚拟机（我记得大多是 AWS EC2）也确定下来，node 的 IP 地址与网络也是静态，所以很少会出现频繁上线、下线的情况，即使在进行频繁迭代时，也是更新运行的 jar，而不会修改运行实例。国内很多实现也是类似的，在我们参与的项目中，很多客户的架构图上总会清晰的表达：这几台机器是 xx 服务，那几台是 xx 服务，他们使用 Eureka 注册发现。第二，所有的实现都是 Java Code，高级语言虽然在效率上不如系统级语言，但是易于表达与修改，使得 Netflix 能够保持与云环境、IDC 的距离，并且很多功能通过 annotation 加入，也能让代码修改的成本变低。
 
-![3.png](https://ucc.alicdn.com/pic/developer-ecology/a338f5adde7b49f2aee2ed92cc90915c.png?x-oss-process=image/resize,w_1400/format,webp "3.png")
+![3.png](images/choosing-service-discovery/04.png "3.png")
 
 Eureka 的逻辑架构很清楚的表达了 Eureka Client、Server 之间的关系，以及他们的 Remote Call 是调用的。
 
@@ -42,7 +42,7 @@ Eureka 的限制随着容器的流行被逐渐的放大，我们渐渐的发现 
 
 Consul 作为继任者解决了很多问题，首先 Consul 使用了现在流行的 service mesh 模式，在一个“控制面”中提供了服务发现、配置管理与划分等能力，与 Netflix OSS 套件一样，任何的这些功能都是可以独立使用的，也可以组合在一起去构建我们自己的 service mesh 实现。Service mesh 作为实现微服务架构的新模式，核心思想在于进程之外 out-of-process 的实现功能，也就是 sidecar，我们可以通过 proxy 实现 interceptor 在不改变代码的情况下注入某些功能，比如服务注册发现、比如日志记录、比如服务之间的授信。
 
-![4.png](https://ucc.alicdn.com/pic/developer-ecology/e9cc8f10aad9461c9f1ef1f110780405.png?x-oss-process=image/resize,w_1400/format,webp "4.png")
+![4.png](images/choosing-service-discovery/05.png "4.png")
 
 Consul 的架构更为全面并复杂，支持多 Data Center，使用了 GOSSIP 协议，有 Control Panel 提供 Mesh 能力，基本上解决为了 Eureka 的问题。
 
@@ -67,7 +67,7 @@ Consul 的架构更为全面并复杂，支持多 Data Center，使用了 GOSSIP
 
 这个过程是非常直接的，作为调用者，我有所有可用服务的列表，所以我可以很灵活的决定我该调用谁，我可以简单的实现断路器。但是缺点的话也很清楚，我们必须依赖 SDK，如果是不同的编程语言或框架，我们就必须要编写自己的实现。
 
-![5.png](https://ucc.alicdn.com/pic/developer-ecology/7b4602f6663247458d00d5e78de5aa6d.png?x-oss-process=image/resize,w_1400/format,webp "5.png")
+![5.png](images/choosing-service-discovery/06.png "5.png")
 
 像蜘蛛网一样的互相调用过程，并且每个服务都必须有 SDK 来实现客户端的服务发现，比如 IP3 这台机器，是由它来决定最终访问 Service 2 的那个节点。同时，IP23 刚刚上线，但是还没有流量过来。
 
@@ -88,7 +88,7 @@ Consul 的架构更为全面并复杂，支持多 Data Center，使用了 GOSSIP
 
 在微服务世界，我们很希望每个服务都是独立且完整的，就像面向对象编程一样，细节应该被隐藏到模块内部。按照这种想法，服务端的服务发现（server-side serivce discovery）会更具有优势，其实我们对这种模式并不陌生，在使用 NGINX 进行负载均衡的代理时，我们就在实践这种模式，一旦流量到了 proxy，由 proxy 决定下发至哪个节点，而 proxy 可以通过 healthcheck 来判断哪个节点是否健康。
 
-![6.png](https://ucc.alicdn.com/pic/developer-ecology/e9a10893c4fc4730863ad1bc18e1240f.png?x-oss-process=image/resize,w_1400/format,webp "6.png")
+![6.png](images/choosing-service-discovery/07.png "6.png")
 
 逻辑上还是 serivce 1 -> service 2 -> service 34，但是 LB 或者 Service 帮助我们隐藏了细节，从 Service 1 看 Service 2，就只能看到一个服务，而不是一堆机器。
 
@@ -114,7 +114,7 @@ Kubernetes Service 也具有同样的能力，随着容器化的逐渐成熟，�
 
 进行技术选型的压力是非常之大的，随着技术的演进、人员的更替，很多系统逐渐变成了无法修改、无法移动的存在，作为技术负责人我们在进行这件工作时应该更加注意，选择某项技术时也需要考虑自己能否负担的起。Spring Cloud 提供的微服务方案在易用性上肯定好于自己在 Kubernetes 上发明新的，但是我们也担心它尾大不掉，所以在我们现在接触的项目中，对 Spring Cloud 上的应用进行迁移、重构还是可以负担的起的，但我非常担心几年后，改造的成本就会变的非常高，最终导向重写的境地。
 
-![7.png](https://ucc.alicdn.com/pic/developer-ecology/28aee61612fa467283c0f83e6b691b43.png?x-oss-process=image/resize,w_1400/format,webp "7.png")
+![7.png](images/choosing-service-discovery/08.png "7.png")
 
 我们将调用方式分为“同步”与“异步”两种情况，在异步调用时，使用 MQ 传输事件，或者使用 Kafka 进行 Pub / Sub，事实上，Event Driven 的系统更有灵活性，也符合 Domain 的封闭。
 
