@@ -8,6 +8,10 @@
         "title": "架构设计",
         "articles": [
           {
+            "slug": "building-an-agent-platform",
+            "title": "如何快速做一个完整的 Agent Platform"
+          },
+          {
             "slug": "clean-architecture-principles",
             "title": "Clean Architecture 读后感 1 · 原则"
           },

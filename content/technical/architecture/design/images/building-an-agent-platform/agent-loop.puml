@@ -1,0 +1,37 @@
+@startuml
+hide footbox
+skinparam defaultFontName PingFang SC
+skinparam defaultFontSize 15
+skinparam dpi 165
+skinparam shadowing false
+skinparam backgroundColor #FAFCFC
+skinparam sequence {
+ ArrowColor #345A69
+ ParticipantBackgroundColor #E7F1F2
+ ParticipantBorderColor #477985
+ LifeLineBorderColor #94ADB2
+ GroupBorderColor #839CA2
+ GroupHeaderBackgroundColor #E7EEF0
+}
+participant "浏览器" as web
+participant "会话队列\nLlmRunLoop" as run
+participant "LangChain4j\nAI Services" as ai
+participant "模型" as model
+participant "业务工具" as tool
+web -> run : chat 消息入队
+loop 队列里还有消息
+  run -> run : 按 FIFO 取一条
+  run -> ai : chatWithStream，注册回调并启动
+  ai -> model : 消息、历史与工具清单
+  loop 模型请求工具时
+    model --> ai : 工具名、参数
+    ai -> tool : 执行
+    tool --> ai : 结果
+    ai -> model : 带上工具结果继续
+  end
+  model --> ai : 回答
+  ai --> run : 文本增量、完成回调
+  run --> web : 向订阅者推送事件
+end
+run -> run : 队列为空，回到 IDLE
+@enduml

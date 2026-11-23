@@ -1,0 +1,25 @@
+@startuml
+!pragma layout smetana
+skinparam defaultFontName PingFang SC
+skinparam defaultFontSize 16
+skinparam dpi 175
+skinparam shadowing false
+skinparam backgroundColor #FAFCFC
+skinparam ArrowColor #375C6D
+skinparam ArrowFontColor #254759
+skinparam ComponentBackgroundColor #EAF3F4
+skinparam ComponentBorderColor #447681
+skinparam DatabaseBackgroundColor #F3EEDD
+skinparam DatabaseBorderColor #8E7951
+skinparam nodesep 35
+skinparam ranksep 32
+component "MindRails Frontend\nNext.js · 浏览器" as front
+component "MindRails Backend\nJava / Spring Boot\n\nAgent · Session · LlmRunLoop\n知识库 / RAG · Skills · MCP · Providers" as back
+database "MySQL\n配置、历史、用量" as db
+database "Qdrant\n知识片段与向量" as qdr
+component "模型服务\n对话 / Embedding" as models
+front -down-> back : HTTP 管理、读取历史\nWebSocket 命令与事件
+back -down-> db : 读写记录
+back -down-> qdr : 建索引、检索
+back -down-> models : 调用模型
+@enduml
