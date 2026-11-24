@@ -116,9 +116,9 @@ def article_images(source):
                 yield image.relative_to(CONTENT)
 
 
-def article_page(title, category_id, category_title, anchor, topic_title, body, headings):
+def article_page(title, category_id, category_title, anchor, topic_title, body, headings, *, show_toc=True):
     toc = ''
-    if len(headings) >= 2:
+    if show_toc and len(headings) >= 2:
         links = ''.join(f'<li class="{level}"><a href="#{heading_id}">{escape(label)}</a></li>'
                         for heading_id, level, label in headings)
         toc = f'''<aside class="article-aside"><details class="toc" open>
@@ -218,7 +218,8 @@ def build():
                 article_links.append(f'<li><a href="{output.as_posix()}">{escape(title)}</a></li>')
                 body, headings = render_article(source, title)
                 images.update(article_images(source))
-                page = article_page(title, category_id, category_title, anchor, topic_title, body, headings)
+                page = article_page(title, category_id, category_title, anchor, topic_title, body, headings,
+                                    show_toc=article.get('show_toc', True))
                 pages.append((output, title, page))
                 if output == FEATURED_ARTICLE:
                     featured_title = title

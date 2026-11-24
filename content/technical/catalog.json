@@ -8,6 +8,11 @@
         "title": "架构设计",
         "articles": [
           {
+            "slug": "llm-function-calling",
+            "title": "Agent 是如何“做事情”的",
+            "show_toc": false
+          },
+          {
             "slug": "clean-architecture-principles",
             "title": "Clean Architecture 读后感 1 · 原则"
           },
